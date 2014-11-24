@@ -5,7 +5,7 @@ Created on 2014-11-18
 @author: Administrator-szx
 '''
 import platform
-from sys import argv
+from sys import argv,stdout
 from os import makedirs,sep
 from os.path import dirname,exists,isdir,splitext,abspath
 from string import replace,find
@@ -14,6 +14,7 @@ from urllib import urlretrieve
 from urlparse import urlparse
 from formatter import DumbWriter,AbstractFormatter,NullFormatter
 from email.header import UTF8
+from IPython.utils.io import raw_print
 #from cStringIO import StringIO
 #import model you need
 
@@ -71,7 +72,7 @@ class Retriever(object):
         """
         获取网页中的链接
         """
-        print 'Get Html Links from file:%s' % self.file
+        #print 'Get Html Links from file:%s' % self.file
         #self.parser=HTMLParser(AbstractFormatter(DumbWriter(StringIO)))
         self.parser=HTMLParser(NullFormatter())
         self.parser.feed(open(self.file).read())
@@ -136,27 +137,29 @@ class Crawler(object):
                 url=self.q.pop()
                 self.getPage(url)
             else:
-                
-                #print "End!!"
                 break
 
 def main(sitelist):
-    #if len(argv)>1:
-    #    url=argv[1]
-    #else:
-    #    try:
-    #        url=raw_input('Enter starting URL:')
-    #    except(KeyboardInterrupt,EOFError):
-    #        url=''
-    #if not url:return
+
     for site in sitelist:
         print "-----------------------------------"
         print site
+        if site.endswith("index.html"):
+            site = site[0:-10]
         robot=Crawler(site)
         robot.go()
         print site," All file has download!"
 if __name__=='__main__':
-    hint = ""
+    hint = "教育与经济社会发展数据平台--区县数据采集系统 V1.0版  当前平台-"
+    if platform.system() == "Windows":
+            print hint.decode('utf-8').encode('gb2312','ignore'),
+    else:
+            print hint,
+    print '' + platform.system()
+    print '--------------------------------------------------------'
+
+    
+    #print hint
     sitelist = set()
     sitefile = open("Site.txt","r")
     if sitefile:
@@ -176,9 +179,19 @@ if __name__=='__main__':
         else:
             print hint
 
+    for site in sitelist:
+        print site
+    hint = "读入网站名成功，按任意键继续"
+    if platform.system() == "Windows":
+            print hint.decode('utf-8').encode('gb2312','ignore')
+    else:
+            print hint
+    
+    raw_input()
     main(sitelist)
     print "---------------------------------------"
     print "End!"
+    raw_input()
                 
                  
         
