@@ -48,7 +48,6 @@ class Retriever(object):
             ldir=replace(ldir,'/',sep)
             path=replace(path,'/',sep)
 
-        
         if not isdir(ldir):
             if exists(ldir):
                     #unlink(ldir)
