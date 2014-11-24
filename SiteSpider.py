@@ -74,10 +74,15 @@ class Retriever(object):
         #print 'Get Html Links from file:%s' % self.file
         #self.parser=HTMLParser(AbstractFormatter(DumbWriter(StringIO)))
         self.parser=HTMLParser(NullFormatter())
-        self.parser.feed(open(self.file).read())
-        self.parser.close()
-        return self.parser.anchorlist
-    
+        #self.parser.feed(open(self.file).read())
+        try:
+            self.parser.feed(open(self.file).read())
+            self.parser.close()
+            return self.parser.anchorlist
+        except:
+            print self.file + " error !"
+            return [] 
+
 class Crawler(object):
     count=0
     def __init__(self,url):
@@ -116,7 +121,9 @@ class Crawler(object):
                         pass
                     if eachLink not in self.seen:
                         #if find(eachLink,self.dom)==-1:
-                        if find(eachLink,url):
+                        if url[:7] == "http://" or url[:7] == "http:\\":
+                            tmp_url = url[7:]
+                        if find(eachLink,tmp_url) == -1:
                             pass
                             #print '...discarded,not in domain'
                         else:
@@ -166,7 +173,8 @@ if __name__=='__main__':
     if sitefile:
         sites = sitefile.readlines()
         for site in sites:
-            sitelist.add(site.strip())
+            if len(site.strip()) > 0:
+                sitelist.add(site.strip())
         if len(sitelist) == 0:
             hint = "站点列表文件为空，请向Site.txt文件中添加要下载的网址"
             if platform.system() == "Windows":
