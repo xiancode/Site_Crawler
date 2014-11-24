@@ -102,6 +102,7 @@ class Crawler(object):
         
         links=r.parseAndGetLinks()
         for eachLink in links:
+            #网址为目录
             if url[-1] == "/":
                 if  eachLink[:2] != "./" and eachLink[:4] != "http" and eachLink[0] != "/":
                     continue
@@ -109,7 +110,8 @@ class Crawler(object):
                     if  eachLink[:2] == "./":
                         eachLink = url + eachLink[2:]
                     elif eachLink[0] == "/":
-                        eachLink = url + eachLink[1:]
+                        #eachLink = url + eachLink[1:]
+                        eachLink = self.dom + eachLink
                     elif eachLink[:4] == "http":
                         pass
                     if eachLink not in self.seen:
