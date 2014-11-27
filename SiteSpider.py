@@ -14,7 +14,7 @@ from urllib import urlretrieve
 from urlparse import urlparse
 from formatter import DumbWriter,AbstractFormatter,NullFormatter
 from email.header import UTF8
-from IPython.utils.io import raw_print
+#from IPython.utils.io import raw_print
 #from cStringIO import StringIO
 #import model you need
 
@@ -116,7 +116,7 @@ class Crawler(object):
                         eachLink = url + eachLink[2:]
                     elif eachLink[0] == "/":
                         #eachLink = url + eachLink[1:]
-                        eachLink = self.dom + eachLink
+                        eachLink = "http://" + self.dom + eachLink
                     elif eachLink[:4] == "http":
                         pass
                     if eachLink not in self.seen:
